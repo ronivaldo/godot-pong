@@ -15,7 +15,6 @@ script = ExtResource("1_uwrxv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(640, 360)
-current = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
