@@ -73,6 +73,17 @@ Wires detectors and ball signals, maintains score, starts and stops rounds, rese
 ### Dependencies
 - Relies on `Ball`, `Paddle` instances and `HUD` nodes, `StartDelay` timer, and audio resources. Uses Godot API: scene tree, input actions, drawing API.
 
+### **Screen Shake**
+
+- **Purpose:** fornece feedback visual rápido ao jogador. Dois casos são cobertos:
+	- Shake leve: disparado em colisões/rebotes para dar sensação de impacto.
+	- Shake de ponto: shake mais forte e curto quando um jogador marca ponto.
+- **Onde está implementado:** em `scripts/game.gd` — funções `shake_camera(amount, duration)`, `shake_light()` e `shake_point()`.
+- **Como funciona (técnico):** a `Camera2D.offset` é atualizada por passos curtos com valores aleatórios dentro de um intervalo definido por `amount`. Ao final do tempo (`duration`) a câmera retorna suavemente ao offset zero usando um `SceneTreeTween` via `create_tween()`.
+- **Parâmetros ajustáveis (no Inspector do nó `Game`):** `shake_amount_light`, `shake_time_light`, `shake_amount_point`, `shake_time_point`.
+- **Gatilhos:** `shake_light()` é chamado em `_on_ball_bounced()`; `shake_point()` é chamado em `_on_detector_ball_out()` quando um ponto é marcado.
+- **Notas:** a implementação interrompe qualquer tween de retorno em andamento antes de aplicar um novo shake para evitar conflitos.
+
 ---
 
 ## File: scripts/hud.gd

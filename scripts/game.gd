@@ -27,6 +27,10 @@ var score = Vector2i.ZERO
 @export var shake_time_light: float = 0.12
 @export var shake_amount_point: float = 18.0
 @export var shake_time_point: float = 0.18
+# Screen shake params
+# `shake_amount_light` / `shake_time_light`: valores para o shake leve (por exemplo, em rebotes)
+# `shake_amount_point` / `shake_time_point`: valores para o shake mais forte, curto (ao marcar ponto)
+# Estes são `export` para serem ajustados no Inspector do nó `Game` em tempo de edição.
 
 func _ready() -> void:
 	detector_left.ball_out.connect(_on_detector_ball_out)
@@ -115,22 +119,32 @@ func update_line_2d(points):
 	
 
 func _on_ball_bounced():
-	# pequeno shake ao colidir/bounce
+	# Ao rebater (bounce) fazemos um pequeno screen shake para dar feedback tátil.
+	# Usamos `shake_light()` que aplica offsets curtos na `Camera2D`.
 	shake_light()
 	simulate_ball_movement()
 
 
 func _rand_range(minv: float, maxv: float) -> float:
+	# Retorna um valor aleatório entre `minv` e `maxv` (float).
+	# Pequena utilidade para gerar offsets randômicos do shake.
 	return lerp(minv, maxv, randf())
 
 
 func shake_camera(amount: float, duration: float, step: float = 0.02) -> void:
+	# Aplica o efeito de screen shake na `Camera2D`.
+	# - `amount`: magnitude máxima do offset (em pixels)
+	# - `duration`: tempo total do shake (segundos)
+	# - `step`: passo entre atualizações (quanto menor, mais "nítido" o shake)
 	if camera == null:
 		return
-	# stop any running tweens
+
+	# Se houver um tween de retorno em andamento, finalize-o antes
 	if _current_tween:
 		_current_tween.kill()
 		_current_tween = null
+
+	# Aplica offsets aleatórios por `duration` segundos
 	var elapsed := 0.0
 	while elapsed < duration:
 		var ox = _rand_range(-amount, amount)
@@ -139,7 +153,7 @@ func shake_camera(amount: float, duration: float, step: float = 0.02) -> void:
 		await get_tree().create_timer(step).timeout
 		elapsed += step
 
-	# smooth return to center using SceneTreeTween
+	# Faz um retorno suave ao centro usando SceneTreeTween (create_tween())
 	_current_tween = create_tween()
 	_current_tween.tween_property(camera, "offset", Vector2.ZERO, 0.08)
 	await get_tree().create_timer(0.08).timeout
@@ -149,10 +163,12 @@ func shake_camera(amount: float, duration: float, step: float = 0.02) -> void:
 
 
 func shake_light() -> void:
+	# Conveniência: shake leve usado em colisões/rebotes.
 	shake_camera(shake_amount_light, shake_time_light)
 
 
 func shake_point() -> void:
+	# Conveniência: shake mais forte e curto usado ao marcar ponto.
 	shake_camera(shake_amount_point, shake_time_point)
 
 func simulate_ball_movement(seconds: float = 3.0):
