@@ -1,0 +1,12 @@
+Ball (class): In-game ball entity controlling movement, collisions, speed, and sounds.
+Paddle (class): Paddle entity handling player/AI input, movement, and collision behavior.
+Game (module/script): Main game controller orchestrating rounds, score, and scene components.
+HUD (module/script): UI controller that updates on-screen scores.
+Detector (module/script): Area2D detector signaling when the ball leaves play bounds.
+StartDelay (Timer): Timer used to delay round start after reset.
+BallMovimentLine2D (Line2D): Visual predictive path renderer for the ball.
+Beep1 / Beep2 (AudioStreamPlayer2D): Sound effects for ball bounces.
+BallOutSound (AudioStreamPlayer2D): Sound played when ball exits play area.
+project.godot (config): Project configuration including input mappings and main scene.
+Assets (audio/font): beep1.wav, beep2.wav, explosion.wav, pong-score-extended.ttf.
+

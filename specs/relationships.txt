@@ -1,0 +1,16 @@
+Game | uses | Ball
+Game | uses | Paddle
+Game | uses | HUD
+Game | uses | Detector
+Game | depends_on | project.godot (input mappings, main scene)
+Ball | uses | Beep1
+Ball | uses | Beep2
+Paddle | depends_on | input actions (paddle_up, paddle_down, paddle_up_two, paddle_down_two)
+Paddle | uses | CollisionShape2D
+Detector | uses | Area2D collision
+HUD | uses | pong-score-extended.ttf
+Ball | emits | bounced
+Detector | emits | ball_out
+Game | listens_to | bounced
+Game | listens_to | ball_out
+

@@ -1,0 +1,29 @@
+Entities and Data Models
+
+- Ball
+	- Properties: `global_position` (Vector2), `speed` (float), `move_dir` (Vector2), `active` (bool)
+	- Behaviors: `bounce_from_paddle(paddle_y_pos, paddle_height)`, `reset(pos)`, `get_size()`
+
+- Paddle
+	- Properties: `global_position` (Vector2), `velocity` (float), `is_ai` (bool), `is_player_one` (bool), `ai_target_y_pos` (float)
+	- Behaviors: `get_ai_moviment_dir()`, `_physics_process(delta)`, `_on_body_entered(body)`
+
+- Game
+	- Properties: `score` (Vector2i with x=left, y=right), `final_score` (int), `game_area_size` (Vector2)
+	- Behaviors: `reset_game()`, `reset_round()`, `simulate_ball_movement(seconds)`, `_on_detector_ball_out(is_left)`
+
+- HUD
+	- Properties: left and right label text
+	- Behaviors: `set_new_score(score)`, `reset_score()`
+
+- Detector
+	- Properties: `is_left` (bool)
+	- Behaviors: emits `ball_out(is_left)` when `Ball` enters area
+
+Data types and conventions
+- Positions: `Vector2` (x, y) pixels; vertical axis increases downward.
+- Directions: `move_dir` uses x = -1 or 1 for left/right horizontal direction and y as a continuous value for vertical aiming.
+
+Conversions
+- Ball size obtained from `CollisionShape2D.shape.get_rect().size`.
+

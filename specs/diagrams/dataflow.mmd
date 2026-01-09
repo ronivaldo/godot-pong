@@ -1,0 +1,5 @@
+%% Data flow mermaid diagram
+flowchart TD
+  Input[Player Input] -->|move| PaddleController
+  PaddleController --> GameLoop
+  GameLoop --> Renderer
