@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://ch0pjwbc18waa"]
+
+[ext_resource type="Script" uid="uid://dgjrbx6rfyhcb" path="res://scripts/game.gd" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://balfc6uk0giis" path="res://scenes/paddle.tscn" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://dhabs3fxf4gxp" path="res://scenes/ball.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://cn5obh3nvtcu5" path="res://scenes/wall.tscn" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://cwnbhfq3d40yh" path="res://scenes/detector.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://divxcqpmcim38" path="res://scenes/hud.tscn" id="6_p57ef"]
+[ext_resource type="AudioStream" uid="uid://03cf5t6m7nud" path="res://assets/explosion.wav" id="6_u5sy4"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_8cj0n"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_uwrxv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("6_p57ef")]
+
+[node name="StartDelay" type="Timer" parent="."]
+one_shot = true
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="Background" type="MeshInstance2D" parent="Environment"]
+modulate = Color(0, 0, 0, 1)
+z_index = -10
+position = Vector2(648.25, 366.74997)
+scale = Vector2(1297.5, 734.49994)
+mesh = SubResource("QuadMesh_8cj0n")
+metadata/_edit_lock_ = true
+
+[node name="WallUp" parent="Environment" instance=ExtResource("4_lbhrr")]
+position = Vector2(640, -10)
+
+[node name="WallDown" parent="Environment" instance=ExtResource("4_lbhrr")]
+position = Vector2(640, 730)
+
+[node name="DetectorLeft" parent="Environment" instance=ExtResource("5_iywne")]
+position = Vector2(-10, 360)
+is_left = true
+
+[node name="DetectorRight" parent="Environment" instance=ExtResource("5_iywne")]
+position = Vector2(1290, 360)
+
+[node name="TheBall" type="Node" parent="."]
+
+[node name="Ball" parent="TheBall" instance=ExtResource("3_lnu2h")]
+position = Vector2(640, 360)
+
+[node name="BallMovimentLine2D" type="Line2D" parent="TheBall"]
+visible = false
+width = 4.0
+default_color = Color(0.79607844, 0.22352941, 0.3137255, 1)
+
+[node name="BallOutSound" type="AudioStreamPlayer2D" parent="TheBall"]
+stream = ExtResource("6_u5sy4")
+
+[node name="ThePaddles" type="Node" parent="."]
+
+[node name="PaddleOne" parent="ThePaddles" instance=ExtResource("2_yqjtg")]
+position = Vector2(50, 360)
+is_ai = true
+is_player_one = true
+
+[node name="PaddleTwo" parent="ThePaddles" instance=ExtResource("2_yqjtg")]
+position = Vector2(1230, 360)

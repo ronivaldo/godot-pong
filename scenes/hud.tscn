@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://divxcqpmcim38"]
+
+[ext_resource type="Script" uid="uid://d3pcqw0qoopa7" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="FontFile" uid="uid://das7rtexnhybh" path="res://assets/pong-score-extended.ttf" id="2_oo0fn"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_toqtt"]
+font_size = 50
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ahhtf")
+
+[node name="LeftScore" type="Label" parent="."]
+layout_mode = 1
+offset_left = 150.0
+offset_right = 300.0
+offset_bottom = 150.0
+theme_override_fonts/font = ExtResource("2_oo0fn")
+text = "0"
+label_settings = SubResource("LabelSettings_toqtt")
+horizontal_alignment = 1
+
+[node name="RightScore" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_right = -150.0
+offset_bottom = 150.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_oo0fn")
+text = "0"
+label_settings = SubResource("LabelSettings_toqtt")
+horizontal_alignment = 1
