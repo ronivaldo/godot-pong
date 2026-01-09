@@ -12,6 +12,8 @@ extends Node2D
 @onready var hud = $CanvasLayer/HUD
 @onready var l2d = $TheBall/BallMovimentLine2D
 @onready var ball_out_sound = $TheBall/BallOutSound
+@onready var camera = $Camera2D
+var _current_tween = null
 
 var game_area_size = Vector2(1280, 720)
 
@@ -19,6 +21,12 @@ var game_area_size = Vector2(1280, 720)
 var score = Vector2i.ZERO
 # exporta para o inspector permitir alterar
 @export var final_score = 10
+
+# Screen shake params
+@export var shake_amount_light: float = 8.0
+@export var shake_time_light: float = 0.12
+@export var shake_amount_point: float = 18.0
+@export var shake_time_point: float = 0.18
 
 func _ready() -> void:
 	detector_left.ball_out.connect(_on_detector_ball_out)
@@ -78,6 +86,9 @@ func _on_detector_ball_out(is_left):
 	# play sound	
 	ball_out_sound.play()
 	
+	# screen shake curto ao marcar ponto
+	shake_point()
+	
 	
 	# remove os pontos da linha
 	# quando a bola sair da tela
@@ -104,7 +115,45 @@ func update_line_2d(points):
 	
 
 func _on_ball_bounced():
+	# pequeno shake ao colidir/bounce
+	shake_light()
 	simulate_ball_movement()
+
+
+func _rand_range(minv: float, maxv: float) -> float:
+	return lerp(minv, maxv, randf())
+
+
+func shake_camera(amount: float, duration: float, step: float = 0.02) -> void:
+	if camera == null:
+		return
+	# stop any running tweens
+	if _current_tween:
+		_current_tween.kill()
+		_current_tween = null
+	var elapsed := 0.0
+	while elapsed < duration:
+		var ox = _rand_range(-amount, amount)
+		var oy = _rand_range(-amount, amount)
+		camera.offset = Vector2(ox, oy)
+		await get_tree().create_timer(step).timeout
+		elapsed += step
+
+	# smooth return to center using SceneTreeTween
+	_current_tween = create_tween()
+	_current_tween.tween_property(camera, "offset", Vector2.ZERO, 0.08)
+	await get_tree().create_timer(0.08).timeout
+	_current_tween = null
+
+	camera.offset = Vector2.ZERO
+
+
+func shake_light() -> void:
+	shake_camera(shake_amount_light, shake_time_light)
+
+
+func shake_point() -> void:
+	shake_camera(shake_amount_point, shake_time_point)
 
 func simulate_ball_movement(seconds: float = 3.0):
 	# get the current ball position
