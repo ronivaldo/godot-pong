@@ -61,6 +61,12 @@ func _on_body_entered(body: Node2D) -> void:
 		# avisa a ball para rebater
 		body.bounce_from_paddle(global_position.y, cshape.shape.get_rect().size.y)
 
+		# Se este paddle for controlado por IA, após rebater
+		# voltamos o alvo da IA para o centro da tela enquanto
+		# a bola vai para o adversário.
+		if is_ai:
+			ai_target_y_pos = get_window().size.y / 2.0
+
 # returns -1, 0, 1 as y direction
 func get_ai_moviment_dir():
 	# obtem a distancia do paddle para o objetivo
